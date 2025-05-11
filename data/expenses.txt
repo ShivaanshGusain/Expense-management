@@ -1,3 +1,20 @@
-hotdog,food,12.00,2025-12-12
-Chocolate,food,12.00,2024-12-12
-chocolate,food,12.00,2024-12-12
+
+Name    :  Chocolate
+ Category: Sweet food
+ Amount  : 10.000000
+ Date    : 2020-12-15
+
+Name    :  Cake
+ Category: Sweet food
+ Amount  : 100.000000
+ Date    : 2020-12-41
+
+Name    :  Macroni
+ Category: Food
+ Amount  : 100.000000
+ Date    : 2020-12-49
+
+Name    :  Noodles
+ Category: Spicey food
+ Amount  : 45.000000
+ Date    : 2020-12-20

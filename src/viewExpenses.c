@@ -10,28 +10,27 @@ void viewExpenses() {
         return;
     }
 
-    char line[1024];
+    char line1[100], line2[100], line3[100],line4[100], line5[100];
     int count = 0;
 
     printf("\n===== All Expenses =====\n");
-    while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = '\0';
-
-        char name[50], category[30], date[20];
-        float amount;
-
-        int result = sscanf(line, "%49[^,],%29[^,],%f,%19[^\n]", name, category, &amount, date);
-
-        if (result == 4) {
-            printf("Expense %d:\n", ++count);
-            printf("  Name    : %s\n", name);
-            printf("  Category: %s\n", category);
-            printf("  Amount  : %.2f\n", amount);
-            printf("  Date    : %s\n\n", date);
-        } else {
-            printf("Warning: Skipping malformed line: %s\n", line);
-        }
+    while (fgets(line1, 100, file) != NULL &&
+        fgets(line2, 100, file) != NULL &&
+        fgets(line3, 100, file) != NULL &&
+        fgets(line4, 100, file) != NULL &&
+        (fgets(line5, 100, file) != NULL || fgets(line5, 100, file) != "\n"))
+    {
+        printf("%s%s%s%s%s\n", line1, line2, line3, line4, line5);
+        count++;
     }
+    // while (fgets(name, sizeof(name), file)!=NULL) {
+    // //         printf("Expense %d:\n", ++count);
+    // //         printf("  Name    : %s\n", name);
+    // //         printf("  Category: %s\n", category);
+    // //         printf("  Amount  : %.2f\n", amount);
+    // //         printf("  Date    : %s\n\n", date);
+    // puts(name);
+    // }
 
     if (count == 0) {
         printf("No expenses recorded yet.\n");

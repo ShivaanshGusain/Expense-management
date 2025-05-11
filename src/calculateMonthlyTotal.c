@@ -4,38 +4,68 @@
 #include "calculateMonthlyTotal.h"
 
 void calculateMonthlyTotal() {
-    char monthInput[8],x[10]; 
-    gets(x);
-    printf("Enter month to calculate total (format: YYYY-MM): ");
-    fgets(monthInput, sizeof(monthInput), stdin);
-    monthInput[strcspn(monthInput, "\n")] = '\0';
+    getchar();
+    FILE *file;
+    char filename[] = "../data/expenses.txt"; 
+    char line1[100], line2[100], line3[100], line4[100], line5[100];
+    char targetMonth[10];
+    int totalAmount = 0;
 
-    FILE *file = fopen("../data/expenses.txt", "r");
-    if (!file) {
-        printf("Could not open expenses.txt\n");
-        return;
+    printf("Enter the month to search (YYYY-MM): ");
+    fgets(targetMonth, sizeof(targetMonth), stdin);
+    targetMonth[strcspn(targetMonth, "\n")] = '\0';
+
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error: Could not open file.\n");
+        return 1;
     }
+    fgets(line1, sizeof(line1), file);
 
-    char line[200];
-    float total = 0.0;
-    int found = 0;
-    while (fgets(line, sizeof(line), file)) {
-        char name[50], category[30], date[20];
-        float amount;
+    while (fgets(line1, sizeof(line1), file) != NULL &&
+           fgets(line2, sizeof(line2), file) != NULL &&
+           fgets(line3, sizeof(line3), file) != NULL &&
+           fgets(line4, sizeof(line4), file) != NULL
+           ) {
 
-        if (scanf("%s %s %f %s", name, category, &amount, date)== 4) {
-            if (strncmp(date, monthInput, 7) == 0) { 
-                total += amount;
-                found = 1;
+        char *dateColon = strchr(line4, ': ');
+        if (dateColon != NULL) {
+            char *dateValue = dateColon + 1;
+
+            while (*dateValue == ' ') dateValue++;
+
+            dateValue[strcspn(dateValue, "\n")] = '\0';
+
+            char text[100] = "Date    : ";
+            strcat(text, targetMonth);
+
+            dateValue[strlen(dateValue)-3] = '\0';
+
+            // printf("\n");
+            // printf("Date value: '%s'\n", dateValue);
+            // printf("Target month: '%s'\n", text);
+
+            if (strcmp(dateValue, text) == 0) {
+
+                // --------- Extract Amount ---------
+                char *amountColon = strchr(line3, ':');
+                if (amountColon != NULL) {
+                    char *amountStr = amountColon + 1;
+                    while (*amountStr == ' ') amountStr++;
+                    amountStr[strcspn(amountStr, "\n")] = '\0';
+
+
+                    int amount = atoi(amountStr);  
+                    totalAmount += amount;         
+                }
             }
         }
-    }
 
-    if (found) {
-        printf("Total expenses for %s: %.2f\n", monthInput, total);
-    } else {
-        printf("No expenses found for %s.\n", monthInput);
+        char temp[100];
+        fgets(temp, sizeof(temp), file);
     }
 
     fclose(file);
+
+    printf("Total amount in %s: %d\n", targetMonth, totalAmount);  // Final result
 }
